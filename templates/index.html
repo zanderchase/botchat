@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <h2>Contacts</h2>
+    <p>Select contact to chat:</p>
+
+    <div class="tab">
+        <button class="tablinks" onclick="openChat(event, 'Coach')" id="defaultOpen">Coach</button>
+        <button class="tablinks" onclick="openChat(event, 'Pirate')">Pirate</button>
+        <button class="tablinks" onclick="openChat(event, 'Search')">Search</button>
+        <button class="tablinks" onclick="openChat(event, 'MyFitness')">MyFitness</button>
+    </div>
+
+    <div id="Coach" class="tabcontent">
+        <h3>Coach</h3>
+        <form>
+            <div id="chatboxCoach">
+                <div class="imessage">
+                    <p class="from-them"><span>Hi! It's your personal trainer here.</span></p>
+                </div>
+            </div>
+            <div id="inputCoach" class="row">
+                <div class="col-md-10">
+                    <input id="textCoach" type="text" name="msg" placeholder="Message" class="form-control">
+                    <button type="submit" id="send" class="btn btn-warning">Send</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="Pirate" class="tabcontent">
+        <h3>Pirate</h3>
+        <form>
+            <div id="chatboxPirate">
+                <div class="imessage">
+                    <p class="from-them"><span>Hi! It's a pirate here.</span></p>
+                </div>
+            </div>
+            <div id="inputPirate" class="row">
+                <div class="col-md-10">
+                    <input id="textPirate" type="text" name="msg" placeholder="Message" class="form-control">
+                    <button type="submit" id="send" class="btn btn-warning">Send</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="Search" class="tabcontent">
+        <h3>Search</h3>
+        <form>
+            <div id="chatboxSearch">
+                <div class="imessage">
+                    <p class="from-them"><span>Hi! What would you like to search?.</span></p>
+                </div>
+            </div>
+            <div id="inputSearch" class="row">
+                <div class="col-md-10">
+                    <input id="textSearch" type="text" name="msg" placeholder="Message" class="form-control">
+                    <button type="submit" id="send" class="btn btn-warning">Send</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="MyFitness" class="tabcontent">
+        <h3>MyFitness</h3>
+        <form>
+            <div id="chatboxMyFitness">
+                <div class="imessage">
+                    <p class="from-them"><span>Hi! What would you like to search?.</span></p>
+                </div>
+            </div>
+            <div id="inputMyFitness" class="row">
+                <div class="col-md-10">
+                    <input id="textMyFitness" type="text" name="msg" placeholder="Message" class="form-control">
+                    <button type="submit" id="send" class="btn btn-warning">Send</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function openChat(evt, name) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
+            api_url = "/get" + name
+            user_input = "input" + name
+            chatbox = "#chatbox" + name
+            user_text = "#text" + name
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the link that opened the tab
+            document.getElementById(name).style.display = "block";
+            evt.currentTarget.className += " active";
+
+
+
+        }
+
+        document.getElementById("defaultOpen").click();
+
+
+
+        $(document).ready(function () {
+            $("form").on("submit", function (event) {
+                var rawText = $(user_text).val();
+                var userHtml = '<div class="imessage"> <p class="from-me"><span>' + rawText + "</span></p> </div>";
+                $(user_text).val("");
+                $(chatbox).append(userHtml);
+                document.getElementById(user_input).scrollIntoView({
+                    block: "start",
+                    behavior: "smooth",
+                });
+                $.ajax({
+                    data: {
+                        msg: rawText,
+                    },
+                    type: "POST",
+                    url: api_url,
+                }).done(function (data) {
+                    var botHtml = '<div class="imessage"> <p class="from-them"><span>' + data + "</span></p> </div>";
+                    $(chatbox).append($.parseHTML(botHtml));
+                    document.getElementById(user_input).scrollIntoView({
+                        block: "start",
+                        behavior: "smooth",
+                    });
+                });
+                event.preventDefault();
+            });
+        });
+
+
+    </script>
+</body>
+
+</html>
