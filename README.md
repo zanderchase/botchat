@@ -1,4 +1,4 @@
-# Botchat
+# Botchat 🤖💬
 
 #### To start clone the repo:
 
