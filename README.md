@@ -1,5 +1,7 @@
 # Botchat 🤖💬
 
+## Contribute
+
 #### To start clone the repo:
 
 https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository
@@ -25,3 +27,21 @@ https://docs.github.com/en/repositories/creating-and-managing-repositories/cloni
 #### Run Flask:
 
 `make run`
+
+## File overview
+
+#### main.py
+
+Main Flask wrapper endpoints
+
+#### chains
+
+Logic for LLM chains leveraging LangChain
+
+#### templates
+
+HTML files
+
+#### static
+
+CSS files
